@@ -100,4 +100,4 @@ for(i in 2:length(links)){
 }
 colnames(data) <- c("abbr","title","pdflink","sysdate")
 # save the data
-write.csv2(data, "scraped/gesetze-im-internet[dot]de.csv2")
+write.csv2(data, "scraped/gesetze-im-internet[dot]de.csv")
