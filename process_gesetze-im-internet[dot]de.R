@@ -44,6 +44,9 @@ data <- subset(data, !duplicated(data$abbr))
 # remove titles
 data$title <- NULL
 
+# store data
+data.hold <- data
+
 # process text #
 # lowercase and remove duplicates
 data$abbr <- tolower(data$abbr)
@@ -61,4 +64,22 @@ data <- data[-which(grepl("^wg$", data))]
 # remove "^wo$" (can be meaningful)
 data <- data[-which(grepl("^wo$", data))]
 
-write.csv2(data, "stopwords/legal-stopwords.csv")
+# export lowercase stopwords
+write.csv2(data, "stopwords/legal-abbreviations_lowercase.csv")
+
+data <- data.hold
+rm(data.hold)
+# create additional entries by removing symbols and numbers
+data.dump <- gsub("[^[:alnum:]]","", data$abbr)
+data <- c(data$abbr, data.dump)
+data <- data[!duplicated(data)]
+
+# check for string length == 2 
+data[which(nchar(data) == 2)]
+# remove "^wg$" (can be meaningful: Wohnungsgemeinschaft)
+data <- data[-which(grepl("^WG$", data))]
+# remove "^wo$" (can be meaningful)
+data <- data[-which(grepl("^WO$", data))]
+
+# export case sensitive stopwords
+write.csv2(data, "stopwords/legal-abbreviations.csv")
